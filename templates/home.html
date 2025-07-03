@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% comment "hero" %}{% endcomment %}
+<section class="hero" 
+style="background-image: url ('{% static "images/hero.jpg" %}');background-size:cover;background-position:center;">
+    <div class="conatiner">
+        <h2>Welcome to Hermoni</h2>
+        <p>Your Best Event Experience</p>
+    </div>
+</section>
+
+
+
+{% comment "events_section" %}{% endcomment %}
+
+<section class="events-section">
+    <div class="container">
+        <h2>Upcoming Events</h2>
+        <div class="row">
+            {% for event in upcoming_events %}
+            <div class="col-md-4">
+                <div class="events-card">
+                    <h3>{{ event.name }}</h3>
+                    <p>{{ event.date }} at {{ event.location}} </p>
+                    <p>{{ event.category.name }}</p>
+                    <a href="{% url 'event_detail' event.pk %}">Details</a>
+                </div>
+            </div>
+
+            {% empty %}
+
+            <p> NO Upcoming events found </p>
+            
+            {% endfor %}
+        </div>    
+    </div>
+</section>
+
+
+{% endblock  %}

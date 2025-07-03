@@ -1,8 +1,8 @@
 {% extends "base.html" %}
-{% block title %}Event Form{% endblock  %}
+{% block title %}Category Form{% endblock  %}
 
 {% block content %}
-<h2 class="text-2xl font-bold mb-4">Event Form</h2>
+<h2 class="text-2xl font-bold mb-4">Category Form</h2>
 
 
 <form method="post" class="space-y-4">
@@ -10,7 +10,7 @@
     {{ form.as_p}}
 
     <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded">Save</button>
-    <a href="{% url 'event_list' %}" class="text-blue-600 hover:underline ml-4">Cancel</a>
+    <a href="{% url 'category_list' %}" class="text-blue-600 hover:underline ml-4">Cancel</a>
 </form>
 
 {% endblock  %}

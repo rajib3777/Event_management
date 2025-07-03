@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Event Details{% endblock  %}
+
+
+{% block content %}
+<h2 class="text-2xl font-bold mb-4">{{ event.name }}</h2>
+
+<p><strong>Description:</strong>{{ event.description }}</p>
+<p><strong>Location:</strong>{{ event.location }}</p>
+<p><strong>Date:</strong>{{ event.date }}</p>
+<p><strong>Time:</strong>{{ event.time }}</p>
+<p><strong>Category:</strong>{{ event.category.name }}</p>
+
+
+<h3 class="text-xl font-semibold mt-4"> Participants</h3>
+<ul class="list-disc ml-6">
+    {% for participant in event.participants.all %}
+    <li>{{ participant.name }} ({{ participant.email }}) </li>
+    {% empty %}
+    <li> No participants yet. </li>
+    {% endfor %}
+</ul>
+
+<a href="{% url 'event_update' event.pk %}" class="text-yellow-600 hover:underline">Edit</a>
+<a href="{% url 'event_delete' event.pk %}" class="text-Red-600 hover:underline">Delete</a>
+
+
+<a href="{% url 'event_list' %}" class="text-blue-600 hover:underline">Back to the Events</a>
+
+
+{% endblock  %}
