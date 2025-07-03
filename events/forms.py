@@ -5,7 +5,7 @@ from .models import Event,Participant,Category
 class EventForm(forms.ModelForm):
     class Meta:
         model = Event
-        fields = ['name','description','date','time','location',' category','participents']
+        fields = ['name','description','date','time','location','category','participants']
         
         
 class ParticipantForm(forms.ModelForm):

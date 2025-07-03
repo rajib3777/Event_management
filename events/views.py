@@ -52,7 +52,7 @@ def event_detail(request,pk):
         pk=pk
     )
     
-    return render(request,'event_detail.html',{'event' : event})
+    return render(request,'events/event_detail.html',{'event' : event})
 
     
 #---- Event_crud ----#
@@ -65,7 +65,7 @@ def event_list(request):
         events = events.filter(name__icontains=query) | events.filter(location__icontains=query)
         
         
-    return render(request,'event_list.html',{'events' : events})
+    return render(request,'events/event_list.html',{'events' : events})
 
 
 def event_create(request):
@@ -79,7 +79,7 @@ def event_create(request):
     else:
         form = EventForm()
         
-    return render(request,'event_form.html',{'form':form})
+    return render(request,'events/event_form.html',{'form':form})
 
 
 def event_update(request,pk):
@@ -94,7 +94,7 @@ def event_update(request,pk):
     else:
         form = EventForm(instance=event)
         
-    return render(request,'event_form.html',{'form':form})
+    return render(request,'events/event_form.html',{'form':form})
 
 
     
@@ -104,7 +104,7 @@ def event_delete(request,pk):
         event.delete()
         return redirect('event_list')
         
-    return render(request,'event_confirm_delete.html',{'event':event})
+    return render(request,'events/event_confirm_delete.html',{'event':event})
 
 
 
@@ -112,7 +112,7 @@ def event_delete(request,pk):
 
 def category_list(request):
     categories = Category.objects.all()
-    return render(request,'category_list.html',{'categories' : categories})
+    return render(request,'category/category_list.html',{'categories' : categories})
 
 
 def category_create(request):
@@ -126,7 +126,7 @@ def category_create(request):
     else:
         form = CategoryForm()
         
-    return render(request,'category_form.html',{'form':form})
+    return render(request,'category/category_form.html',{'form':form})
 
 def category_update(request,pk):
     category = get_object_or_404(Category,pk=pk)
@@ -140,7 +140,7 @@ def category_update(request,pk):
     else:
         form = CategoryForm(instance=category)
         
-    return render(request,'category_form.html',{'form':form})
+    return render(request,'category/category_form.html',{'form':form})
 
 
     
@@ -150,13 +150,13 @@ def category_delete(request,pk):
         category.delete()
         return redirect('category_list')
         
-    return render(request,'category_confirm_delete.html',{'category':category})
+    return render(request,'category/category_delete.html',{'category':category})
 
 #---- participant crud ----#
 
 def participant_list(request):
     participant = Participant.objects.all()
-    return render(request,'participant_list.html',{'participants' : participant})
+    return render(request,'participants/participant_list.html',{'participants' : participant})
 
 
 
@@ -171,7 +171,7 @@ def participant_create(request):
     else:
         form = ParticipantForm()
         
-    return render(request,'participant_form.html',{'form':form})
+    return render(request,'participants/participant_form.html',{'form':form})
 
 def participant_update(request,pk):
     participant = get_object_or_404(Participant,pk=pk)
@@ -185,7 +185,7 @@ def participant_update(request,pk):
     else:
         form = ParticipantForm(instance=participant)
         
-    return render(request,'participant_form.html',{'form':form})
+    return render(request,'participants/participant_form.html',{'form':form})
 
 
     
@@ -193,8 +193,8 @@ def participant_delete(request,pk):
     participant = get_object_or_404(Participant,pk=pk)
     if request.method == 'POST':
         participant.delete()
-        return redirect('participant_list.html')
+        return redirect('participant_list')
         
-    return render(request,'participant_confirm_delete.html',{'participant':participant})
+    return render(request,'participants/participant_delete.html',{'participant':participant})
 
 
