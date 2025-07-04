@@ -21,14 +21,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-0&+hui-f)rx)2_lfw1902s16i2m(r)i-uwo3c*4th-a#^4z!te'
+SECRET_KEY = os.environ.get('django-insecure-0&+hui-f)rx)2_lfw1902s16i2m(r)i-uwo3c*4th-a#^4z!te')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG' , 'True').lower() in ('True','1','t')
 
 ALLOWED_HOSTS = ['*']
-CSRF_TRUSTED_ORIGINS=['https://*.onrender.com','http://127.0.0.1:8000']
-
+CSRF_TRUSTED_ORIGINS = ['https://*onrender.com','http://127.0.0.1:8000']
 
 # Application definition
 
@@ -39,8 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
+    'django_extensions',
     'events',
-    'user_prompt',
     'debug_toolbar',
     'crispy_forms',
     'crispy_tailwind',
@@ -64,6 +64,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'event_man.urls'
@@ -83,8 +84,6 @@ TEMPLATES = [
     },
 ]
 
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR,'static')]
 
 WSGI_APPLICATION = 'event_man.wsgi.application'
 
@@ -96,11 +95,14 @@ WSGI_APPLICATION = 'event_man.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'event_db',         
-        'USER': 'postgres',         
-        'PASSWORD': '11001', 
-        'HOST': 'localhost',        
-        'PORT': '5432',           
+        'NAME': os.environ.get('DB_NAME','event_db'),         
+        'USER': os.environ.get('DB_USER','postgres'),         
+        'PASSWORD': os.environ.get('DB_PASSWORD','11001'), 
+        'HOST': os.environ.get('DB_HOST','localhost'),        
+        'PORT': os.environ.get('DB_PORT','5432'),
+        'OPTIONS' : {
+            'connect_timeout' : 5,
+        },           
     }
 }
 
@@ -111,6 +113,40 @@ DATABASES = {
 #     }
 # }
 
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR,'staticfiles')
+STATICFILES_DIRS = [os.path.join(BASE_DIR,'static')]
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR,'media')
+
+if not DEBUG:
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO','https')
+    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    X_FRAME_OPTIONS = 'DENY'
+    
+    
+EMAIL_BACKEND = os.environ.get(
+    'EMAIL_BACKEND',
+    'django.core.mail.backends.console.EmailBackend'
+)
+
+EMAIL_HOST = os.environ.get('EMAIL_HOST','')
+EMAIL_PORT = os.environ.get('EMAIL_PORT',587)
+EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS',True)
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER','')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD','')
+
+LOGIN_URL = '/admin/login/'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+    
+    
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
@@ -144,19 +180,16 @@ USE_TZ = True
 
 
 #custom-models-url
-AUTH_USER_MODEL = 'user_prompt.CustomUser'
+#AUTH_USER_MODEL = 'user_prompt.CustomUser'
 
 #email-backend
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.2/howto/static-files/
-
-STATIC_URL = 'static/'
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+

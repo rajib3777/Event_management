@@ -1,0 +1,62 @@
+body{
+    font-family: Arial,sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.hero{
+    background-size: cover;
+    background-position: center;
+    color: #fff;
+    text-align: center;
+    padding: 80px 20px;
+}
+
+.event-section{
+    padding: 50px 20px;
+
+}
+
+
+.events-card{
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+
+}
+
+
+.events-card h3{
+    margin-top: 0;
+}
+
+
+a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+a:hover{
+    text-decoration: underline;
+}
+
+form input,form button{
+    padding: 8px;
+    margin: 5px 0;
+}
+
+
+button, .btn{
+    background: #007bff;
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover,.btn:hover{
+    background: #0056b3;
+}

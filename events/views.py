@@ -3,6 +3,7 @@ from django.db.models import Count,Prefetch,Sum
 from django.utils import timezone
 from .models import Event,Participant,Category
 from .forms import EventForm,ParticipantForm,CategoryForm
+from django.utils.text import slugify
 
 
 #---- Homepage ----#
@@ -58,24 +59,33 @@ def event_detail(request,pk):
 #---- Event_crud ----#
 def event_list(request):
     query = request.GET.get('q')
-    events = Event.objects.all().select_related('category').prefetch_related('participants')
+    today = timezone.now().date()
+    events = Event.objects.filter(status='published').order_by('date')
     
+    category_id = request.GET.get('category')
     
-    if query:
-        events = events.filter(name__icontains=query) | events.filter(location__icontains=query)
+    if category_id:
+        events = events.filter(category_id=category_id)
         
+    context = {
+        'events' : events,
+        'categories' : Category.objects.all(),
+        'selected_category' : int (category_id) if category_id else None
         
-    return render(request,'events/event_list.html',{'events' : events})
-
+    }    
+    
+    return render(request,'events/event_list.html',context)
+    
 
 def event_create(request):
     if request.method == 'POST':
         form = EventForm(request.POST,request.FILES)
         if form.is_valid():
-            form.save()
+            event = form.save(commit=False)
+            event.slug = slugify(event.name)
+            event.save()
+            form.save_m2m()
             return redirect('event_list')
-        
-        
     else:
         form = EventForm()
         
